@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 
 export default function Home() {
   // Environment variables with fallback defaults
-  const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER || "521234567890";
+  const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER || "573332773006";
   const webhookUrl = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL || "";
 
   // Form State
