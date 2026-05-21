@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 export default function Home() {
   // Environment variables with fallback defaults
   const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER || "573332773006";
-  const webhookUrl = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL || "http://localhost:5678/webhook/leads";
+  const webhookUrl = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL || "https://primary-production-81431.up.railway.app/webhook/leads";
 
   // Form State
   const [formData, setFormData] = useState({
