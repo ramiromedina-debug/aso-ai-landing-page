@@ -26,53 +26,37 @@ export default function Home() {
       (window as any).dataLayer = (window as any).dataLayer || [];
     }
   }, []);
- // Evita el atrapamiento de scroll en el celular simulado
-  useEffect(() => {
-    const container = chatContainerRef.current;
-    if (!container) return;
-    let touchStartY = 0;
-    const handleWheel = (e: WheelEvent) => {
-      const { scrollTop, scrollHeight, clientHeight } = container;
-      const isScrollingDown = e.deltaY > 0;
-      const isScrollingUp = e.deltaY < 0;
-      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
-        // Si está en el fondo y sigue bajando scroll, mueve la ventana de la página
-        window.scrollBy({ top: e.deltaY });
-      } else if (isScrollingUp && scrollTop <= 0) {
-        // Si está al principio y sube scroll, mueve la ventana de la página
-        window.scrollBy({ top: e.deltaY });
-      }
-    };
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
-    };
-    const handleTouchMove = (e: TouchEvent) => {
-      const { scrollTop, scrollHeight, clientHeight } = container;
-      const touchCurrentY = e.touches[0].clientY;
-      const deltaY = touchStartY - touchCurrentY; // Positivo al deslizar hacia abajo (dedo sube)
-      const isScrollingDown = deltaY > 0;
-      const isScrollingUp = deltaY < 0;
-      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
-        // Propaga el scroll táctil a la ventana principal
-        window.scrollBy({ top: deltaY });
-        touchStartY = touchCurrentY;
-      } else if (isScrollingUp && scrollTop <= 0) {
-        // Propaga el scroll táctil a la ventana principal
-        window.scrollBy({ top: deltaY });
-        touchStartY = touchCurrentY;
-      }
-    };
-    // Añadir event listeners
-    container.addEventListener("wheel", handleWheel, { passive: true });
-    container.addEventListener("touchstart", handleTouchStart, { passive: true });
-    container.addEventListener("touchmove", handleTouchMove, { passive: true });
-    // Limpieza de event listeners al desmontar
-    return () => {
-      container.removeEventListener("wheel", handleWheel);
-      container.removeEventListener("touchstart", handleTouchStart);
-      container.removeEventListener("touchmove", handleTouchMove);
-    };
-  }, []);
+ // Código optimizado en page.tsx
+useEffect(() => {
+  const container = chatContainerRef.current;
+  if (!container) return;
+
+  const handleWheel = (e: WheelEvent) => {
+    const { scrollTop, scrollHeight, clientHeight } = container;
+    
+    // Si el contenido del chat cabe completo sin desbordar (como es el caso actual),
+    // no interferimos y dejamos que el navegador haga el scroll natural.
+    if (scrollHeight <= clientHeight + 1) return;
+
+    const isScrollingDown = e.deltaY > 0;
+    const isScrollingUp = e.deltaY < 0;
+
+    if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
+      // Ya estamos en el fondo, delegamos el scroll de la rueda a la ventana
+      window.scrollBy({ top: e.deltaY });
+    } else if (isScrollingUp && scrollTop <= 0) {
+      // Ya estamos en el tope, delegamos el scroll de la rueda a la ventana
+      window.scrollBy({ top: e.deltaY });
+    }
+  };
+
+  // Solo se registra el listener de rueda para ordenadores (mouse wheel/trackpad)
+  container.addEventListener("wheel", handleWheel, { passive: true });
+
+  return () => {
+    container.removeEventListener("wheel", handleWheel);
+  };
+}, []);
   // WhatsApp Demo CTA Action
   const handleWhatsAppDemoClick = () => {
     // GTM Event Tracking
