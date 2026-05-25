@@ -26,7 +26,7 @@ export default function Home() {
       (window as any).dataLayer = (window as any).dataLayer || [];
     }
   }, []);
- // Código optimizado en page.tsx
+ // Código optimizado en page.tsx (arreglo error scroll)
 useEffect(() => {
   const container = chatContainerRef.current;
   if (!container) return;
