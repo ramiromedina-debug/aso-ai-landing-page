@@ -203,7 +203,7 @@ useEffect(() => {
             </div>
 
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-50 leading-[1.15] mb-4">
-              ¿Pierdes <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">3 horas al día</span> respondiendo mensajes de WhatsApp sobre el estado de los vehículos?
+            La plataforma de IA que <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">automatiza las cotizaciones</span>, el inventario y la asistencia técnica de tu taller automotriz
             </h1>
 
             <p className="text-sm sm:text-base md:text-lg text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-6">
