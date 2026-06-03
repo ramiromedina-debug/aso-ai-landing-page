@@ -123,6 +123,8 @@ useEffect(() => {
           leadData: {
             nombreTaller: formData.nombreTaller,
             correo: formData.correo,
+            telefono: formData.telefono,
+            nombreCompleto: formData.nombreCompleto,
           },
           timestamp: new Date().toISOString(),
         });
