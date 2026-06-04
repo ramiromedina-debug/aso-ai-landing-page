@@ -26,80 +26,77 @@ export default function Home() {
       (window as any).dataLayer = (window as any).dataLayer || [];
     }
   }, []);
-// Código inteligente: Comportamiento nativo para Chrome y Parche Adaptativo para Huawei/Edge
+// Código de Compatibilidad Universal (Solución definitiva Anti-Bloqueo de Scroll)
   useEffect(() => {
     const container = chatContainerRef.current;
     if (!container) return;
 
-    const ua = navigator.userAgent.toLowerCase();
-    // Detectamos si es el navegador nativo de Huawei (HuaweiBrowser/Petal) o Edge Móvil
-    const isHuaweiOrEdge = ua.includes("huawei") || ua.includes("edge") || ua.includes("edga") || ua.includes("huaweibrowser");
-
-    // Aplicamos el aislamiento nativo por CSS estándar
-    container.style.overscrollBehaviorY = "contain";
+    // Aseguramos que el comportamiento CSS inicial sea el estándar para contenedores con scroll
+    container.style.overscrollBehaviorY = "auto";
     container.style.touchAction = "pan-y";
 
-    // --- MANEJO DE RUEDA (Ordenadores) ---
+    // --- 1. MANEJO DE RUEDA (Laptops y Computadores de Escritorio) ---
     const handleWheel = (e: WheelEvent) => {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const isScrollingDown = e.deltaY > 0;
       const isScrollingUp = e.deltaY < 0;
 
-      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
-        e.preventDefault(); 
+      // Si llegó al fondo y sigue bajando la rueda, transfiere el movimiento al fondo
+      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 2) {
+        e.preventDefault();
         window.scrollBy({ top: e.deltaY, behavior: "auto" });
-      } else if (isScrollingUp && scrollTop <= 0) {
+      } 
+      // Si llegó al tope y sigue subiendo la rueda, transfiere el movimiento al fondo
+      else if (isScrollingUp && scrollTop <= 0) {
         e.preventDefault();
         window.scrollBy({ top: e.deltaY, behavior: "auto" });
       }
     };
 
-    // --- MANEJO TÁCTIL (Solo altera comportamiento si es Huawei o Edge) ---
-    let startY = 0;
+    // --- 2. MANEJO TÁCTIL UNIVERSAL (Móviles: Huawei, Samsung, iPhone, etc.) ---
+    let lastTouchY = 0;
 
     const handleTouchStart = (e: TouchEvent) => {
-      startY = e.touches[0].clientY;
-      if (isHuaweiOrEdge) {
-        container.style.touchAction = "pan-y";
+      if (e.touches.length === 1) {
+        // Registramos el punto exacto donde el usuario apoya el dedo
+        lastTouchY = e.touches[0].clientY;
       }
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      // Si es Chrome o Samsung, dejamos que el navegador encadene el scroll a su manera nativa
-      if (!isHuaweiOrEdge) return; 
+      if (e.touches.length !== 1) return; // Ignoramos gestos de pellizco (zoom)
 
       const { scrollTop, scrollHeight, clientHeight } = container;
       const currentY = e.touches[0].clientY;
-      const deltaY = startY - currentY; 
+      
+      // Calculamos la diferencia en píxeles de cuánto se movió el dedo
+      // deltaY positivo = el dedo sube (el usuario quiere bajar la página)
+      const deltaY = lastTouchY - currentY; 
+      lastTouchY = currentY;
 
-      // Parche exclusivo para mitigar el congelamiento en Huawei/Edge
-      if (deltaY > 0 && scrollTop + clientHeight >= scrollHeight - 1) {
-        container.style.touchAction = "none";
-        return;
-      }
-      if (deltaY < 0 && scrollTop <= 0) {
-        container.style.touchAction = "none";
-        return;
+      const isScrollingDown = deltaY > 0;
+      const isScrollingUp = deltaY < 0;
+
+      // CASO A: Llegó al fondo del chat de WhatsApp y el dedo sigue subiendo
+      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 2) {
+        // Movemos la landing page principal los mismos píxeles exactos que se movió el dedo
+        window.scrollBy({ top: deltaY, behavior: "auto" });
+      } 
+      // CASO B: Llegó al tope superior del chat y el dedo sigue bajando
+      else if (isScrollingUp && scrollTop <= 0) {
+        window.scrollBy({ top: deltaY, behavior: "auto" });
       }
     };
 
-    const handleTouchEnd = () => {
-      if (isHuaweiOrEdge) {
-        container.style.touchAction = "pan-y";
-      }
-    };
-
-    // Registrar todos los eventos de manera segura
+    // Registramos los listeners. Usamos { passive: true } para touch para máxima suavidad de hardware
     container.addEventListener("wheel", handleWheel, { passive: false });
     container.addEventListener("touchstart", handleTouchStart, { passive: true });
-    container.addEventListener("touchmove", handleTouchMove, { passive: isHuaweiOrEdge ? false : true });
-    container.addEventListener("touchend", handleTouchEnd, { passive: true });
+    container.addEventListener("touchmove", handleTouchMove, { passive: true });
 
     return () => {
       container.removeEventListener("wheel", handleWheel);
       container.removeEventListener("touchstart", handleTouchStart);
       container.removeEventListener("touchmove", handleTouchMove);
-      container.removeEventListener("touchend", handleTouchEnd);
     };
   }, []);
   // WhatsApp Demo CTA Action
