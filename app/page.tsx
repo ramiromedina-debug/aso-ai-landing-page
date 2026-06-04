@@ -26,12 +26,16 @@ export default function Home() {
       (window as any).dataLayer = (window as any).dataLayer || [];
     }
   }, []);
-// Código ULTRA-COMPATIBLE (Corregido para Huawei, Samsung y navegadores estrictos)
+// Código de compatibilidad absoluta (Fijación estricta para Navegadores Huawei y Edge)
   useEffect(() => {
     const container = chatContainerRef.current;
     if (!container) return;
 
-    // --- 1. CONFIGURACIÓN PARA PC (Rueda del Ratón) ---
+    // 1. INYECCIÓN CSS: Le decimos al navegador que NO bloquee el scroll del padre
+    // 'contain' o 'auto' controlado evita el bloqueo severo en navegadores viejos/modificados
+    container.style.overscrollBehaviorY = "contain"; 
+
+    // --- CONFIGURACIÓN PARA PC (Rueda del Ratón) ---
     const handleWheel = (e: WheelEvent) => {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const isScrollingDown = e.deltaY > 0;
@@ -46,46 +50,43 @@ export default function Home() {
       }
     };
 
-    // --- 2. CONFIGURACIÓN PARA MÓVILES (Fijación estricta para Huawei) ---
+    // --- CONFIGURACIÓN PARA MÓVILES (Fuerza Bruta para Huawei Nativo y Edge) ---
     let touchStartY = 0;
 
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
-      // Restablecemos la propiedad para permitir interactuar al inicio
-      container.style.pointerEvents = "auto";
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const touchCurrentY = e.touches[0].clientY;
-      const touchDeltaY = touchStartY - touchCurrentY;
+      const touchDeltaY = touchStartY - touchCurrentY; // Positivo = Dedo sube (Baja scroll)
 
-      const isScrollingDown = touchDeltaY > 0;
-      const isScrollingUp = touchDeltaY < 0;
-
-      // PARCHE EMUI/HUAWEI: Si llegamos al límite del contenedor, desactivamos 
-      // temporalmente sus eventos táctiles. Esto fuerza al navegador a mover el fondo.
-      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
-        container.style.pointerEvents = "none"; 
+      // SI EL USUARIO YA LLEGÓ AL FINAL Y SIGUE BAJANDO (Dedo hacia arriba)
+      if (touchDeltaY > 0 && scrollTop + clientHeight >= scrollHeight - 1) {
+        // Rompemos el bloqueo físico ocultando el contenedor al tacto por un instante
+        container.style.pointerEvents = "none";
         return;
-      } 
-      else if (isScrollingUp && scrollTop <= 0) {
+      }
+      
+      // SI EL USUARIO YA LLEGÓ AL TOPE Y SIGUE SUBIENDO (Dedo hacia abajo)
+      if (touchDeltaY < 0 && scrollTop <= 0) {
         container.style.pointerEvents = "none";
         return;
       }
 
-      // Detener propagación solo si estamos activamente moviéndonos dentro del chat
-      if (scrollHeight > clientHeight) {
+      // Prevenir que Edge y Huawei intenten arrastrar toda la pantalla si estamos dentro del chat
+      if (scrollTop > 0 && scrollTop + clientHeight < scrollHeight) {
         e.stopPropagation();
       }
     };
 
     const handleTouchEnd = () => {
-      // Al levantar el dedo, restauramos la interacción con el chat simulado
+      // En cuanto el usuario levanta el dedo, el chat vuelve a ser interactivo inmediatamente
       container.style.pointerEvents = "auto";
     };
 
-    // Enlace de Eventos
+    // Registrar Eventos
     container.addEventListener("wheel", handleWheel, { passive: false });
     container.addEventListener("touchstart", handleTouchStart, { passive: true });
     container.addEventListener("touchmove", handleTouchMove, { passive: false });
