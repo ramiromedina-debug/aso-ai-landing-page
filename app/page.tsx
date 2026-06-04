@@ -26,34 +26,95 @@ export default function Home() {
       (window as any).dataLayer = (window as any).dataLayer || [];
     }
   }, []);
-// Motor de Scroll Optimizado: Solo maneja la rueda del ratón en computadoras
+// Motor de Continuidad Gráfica Universal (Soporte Estricto para Huawei Nova Y91, Samsung, iOS y PC)
   useEffect(() => {
     const container = chatContainerRef.current;
     if (!container) return;
 
-    const handleWheel = (e: WheelEvent) => {
-      // Si el usuario está en un celular o tablet, el CSS se encarga de todo de forma nativa
-      if (window.innerWidth < 768) return;
+    // Aseguramos el comportamiento nativo inicial por CSS
+    container.style.overscrollBehaviorY = "contain";
+
+    let lastTouchY = 0;
+    let scrollAccumulator = 0;
+    let rafId: number | null = null;
+
+    // Ejecuta el movimiento de la landing page alineado con la tarjeta gráfica (GPU)
+    const renderScroll = () => {
+      if (scrollAccumulator !== 0) {
+        window.scrollBy({ top: scrollAccumulator, behavior: "auto" });
+        scrollAccumulator = 0;
+      }
+      rafId = null;
+    };
+
+    // --- MANEJO TÁCTIL (Celulares y Tablets) ---
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        lastTouchY = e.touches[0].clientY;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+
+      const currentTouchY = e.touches[0].clientY;
+      const deltaY = lastTouchY - currentTouchY; // Píxeles reales movidos por el dedo
+      lastTouchY = currentTouchY;
 
       const { scrollTop, scrollHeight, clientHeight } = container;
-      if (scrollHeight <= clientHeight + 1) return;
 
-      const isScrollingDown = e.deltaY > 0;
-      const isScrollingUp = e.deltaY < 0;
+      // Protección matemática contra decimales de pantalla (Subpixel precision)
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 2;
+      const isAtTop = scrollTop <= 2;
 
-      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
-        e.preventDefault();
-        window.scrollBy({ top: e.deltaY, behavior: "auto" });
-      } else if (isScrollingUp && scrollTop <= 0) {
+      // Si el usuario quiere bajar la web y el chat ya tocó fondo, o si quiere subir y está en el tope
+      if ((deltaY > 0 && isAtBottom) || (deltaY < 0 && isAtTop)) {
+        scrollAccumulator += deltaY;
+
+        // Solicitamos un cuadro de animación al sistema operativo para evitar el lag
+        if (!rafId) {
+          rafId = requestAnimationFrame(renderScroll);
+        }
+
+        // Cancelamos el freno elástico del navegador para liberar el scroll principal
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    const handleTouchEnd = () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+      scrollAccumulator = 0;
+    };
+
+    // --- MANEJO DE RUEDA (Laptops y PCs de Escritorio) ---
+    const handleWheel = (e: WheelEvent) => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
+      const isAtTop = scrollTop <= 0;
+
+      if ((e.deltaY > 0 && isAtBottom) || (e.deltaY < 0 && isAtTop)) {
         e.preventDefault();
         window.scrollBy({ top: e.deltaY, behavior: "auto" });
       }
     };
 
+    // Registro seguro de listeners
+    container.addEventListener("touchstart", handleTouchStart, { passive: true });
+    container.addEventListener("touchmove", handleTouchMove, { passive: false });
+    container.addEventListener("touchend", handleTouchEnd, { passive: true });
     container.addEventListener("wheel", handleWheel, { passive: false });
 
     return () => {
+      container.removeEventListener("touchstart", handleTouchStart);
+      container.removeEventListener("touchmove", handleTouchMove);
+      container.removeEventListener("touchend", handleTouchEnd);
       container.removeEventListener("wheel", handleWheel);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
   // WhatsApp Demo CTA Action
