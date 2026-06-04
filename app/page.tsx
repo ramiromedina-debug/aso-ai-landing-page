@@ -26,72 +26,70 @@ export default function Home() {
       (window as any).dataLayer = (window as any).dataLayer || [];
     }
   }, []);
-// Código de Compatibilidad Universal (Solución definitiva Anti-Bloqueo de Scroll)
+// Motor de Continuidad de Scroll Híbrido (Soporte Universal Escritorio + Móvil Strict)
   useEffect(() => {
     const container = chatContainerRef.current;
     if (!container) return;
 
-    // Aseguramos que el comportamiento CSS inicial sea el estándar para contenedores con scroll
-    container.style.overscrollBehaviorY = "auto";
-    container.style.touchAction = "pan-y";
+    // Aislamiento preventivo de sobre-desplazamiento elástico por CSS nativo
+    container.style.overscrollBehaviorY = "contain";
 
-    // --- 1. MANEJO DE RUEDA (Laptops y Computadores de Escritorio) ---
+    // --- 1. GESTIÓN PARA ESCRITORIO (Rueda del Ratón / Trackpad) ---
     const handleWheel = (e: WheelEvent) => {
       const { scrollTop, scrollHeight, clientHeight } = container;
+      if (scrollHeight <= clientHeight + 1) return;
+
       const isScrollingDown = e.deltaY > 0;
       const isScrollingUp = e.deltaY < 0;
 
-      // Si llegó al fondo y sigue bajando la rueda, transfiere el movimiento al fondo
-      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 2) {
+      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
         e.preventDefault();
         window.scrollBy({ top: e.deltaY, behavior: "auto" });
-      } 
-      // Si llegó al tope y sigue subiendo la rueda, transfiere el movimiento al fondo
-      else if (isScrollingUp && scrollTop <= 0) {
+      } else if (isScrollingUp && scrollTop <= 0) {
         e.preventDefault();
         window.scrollBy({ top: e.deltaY, behavior: "auto" });
       }
     };
 
-    // --- 2. MANEJO TÁCTIL UNIVERSAL (Móviles: Huawei, Samsung, iPhone, etc.) ---
+    // --- 2. GESTIÓN PARA PANTALLAS TÁCTILES (Huawei Nova Y91, Samsung, iOS) ---
     let lastTouchY = 0;
 
     const handleTouchStart = (e: TouchEvent) => {
       if (e.touches.length === 1) {
-        // Registramos el punto exacto donde el usuario apoya el dedo
+        // Registramos el punto inicial exacto donde el usuario apoya el dedo
         lastTouchY = e.touches[0].clientY;
       }
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length !== 1) return; // Ignoramos gestos de pellizco (zoom)
+      if (e.touches.length !== 1) return; // Ignoramos gestos de zoom multi-touch
 
       const { scrollTop, scrollHeight, clientHeight } = container;
-      const currentY = e.touches[0].clientY;
+      const currentTouchY = e.touches[0].clientY;
       
-      // Calculamos la diferencia en píxeles de cuánto se movió el dedo
-      // deltaY positivo = el dedo sube (el usuario quiere bajar la página)
-      const deltaY = lastTouchY - currentY; 
-      lastTouchY = currentY;
+      // Calculamos el delta (cuántos píxeles físicos arrastró el dedo en este frame)
+      const deltaY = lastTouchY - currentTouchY; 
+      lastTouchY = currentTouchY;
 
       const isScrollingDown = deltaY > 0;
       const isScrollingUp = deltaY < 0;
 
-      // CASO A: Llegó al fondo del chat de WhatsApp y el dedo sigue subiendo
-      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 2) {
-        // Movemos la landing page principal los mismos píxeles exactos que se movió el dedo
-        window.scrollBy({ top: deltaY, behavior: "auto" });
+      // CASO A: El usuario arrastra hacia arriba para bajar la web y el chat ya tocó fondo
+      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
+        if (e.cancelable) e.preventDefault(); // Cancelamos el freno físico de EMUI/Huawei
+        window.scrollBy({ top: deltaY, behavior: "auto" }); // Transferimos la energía del dedo al fondo
       } 
-      // CASO B: Llegó al tope superior del chat y el dedo sigue bajando
+      // CASO B: El usuario arrastra hacia abajo para subir la web y el chat está en el tope superior
       else if (isScrollingUp && scrollTop <= 0) {
+        if (e.cancelable) e.preventDefault();
         window.scrollBy({ top: deltaY, behavior: "auto" });
       }
     };
 
-    // Registramos los listeners. Usamos { passive: true } para touch para máxima suavidad de hardware
+    // Registramos los listeners táctiles con 'passive: false' en move para permitir el control de frenado
     container.addEventListener("wheel", handleWheel, { passive: false });
     container.addEventListener("touchstart", handleTouchStart, { passive: true });
-    container.addEventListener("touchmove", handleTouchMove, { passive: true });
+    container.addEventListener("touchmove", handleTouchMove, { passive: false });
 
     return () => {
       container.removeEventListener("wheel", handleWheel);
@@ -353,9 +351,13 @@ export default function Home() {
               </div>
 
               {/* Chat Messages Body */}
-              <div
+<div
   ref={chatContainerRef}
-  className="flex-1 bg-slate-950 p-4 overflow-y-auto space-y-4 text-xs"
+  className="flex-1 bg-slate-950 p-4 overflow-y-auto space-y-4 text-xs scroll-smooth"
+  style={{
+    WebkitOverflowScrolling: "touch", // Fuerza el comportamiento elástico suave en navegadores móviles
+    willChange: "scroll-position",    // Prepara al procesador del teléfono para un movimiento continuo
+  }}
 >
                 
                 {/* SYSTEM MESSAGE TIMESTAMP */}
