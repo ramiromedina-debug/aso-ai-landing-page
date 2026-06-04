@@ -26,39 +26,67 @@ export default function Home() {
       (window as any).dataLayer = (window as any).dataLayer || [];
     }
   }, []);
-// Código optimizado para chat con desborde (Scroll fluido y encadenado)
+// Código 100% Optimizado para PC y Celulares (Scroll Híbrido Rueda + Táctil)
   useEffect(() => {
     const container = chatContainerRef.current;
     if (!container) return;
 
+    // --- 1. GESTIÓN PARA ORDENADORES (Rueda del Ratón) ---
     const handleWheel = (e: WheelEvent) => {
       const { scrollTop, scrollHeight, clientHeight } = container;
-      
       const isScrollingDown = e.deltaY > 0;
       const isScrollingUp = e.deltaY < 0;
 
-      // 1. CONDICIÓN: El usuario scrollea hacia abajo y ya llegó al fondo del chat
       if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
-        // Prevenimos que el celular intente hacer un scroll que ya no tiene
         e.preventDefault(); 
-        // Transferimos el movimiento suavemente a la landing page principal
         window.scrollBy({ top: e.deltaY, behavior: "auto" });
-      } 
-      // 2. CONDICIÓN: El usuario scrollea hacia arriba y ya llegó al tope superior del chat
-      else if (isScrollingUp && scrollTop <= 0) {
+      } else if (isScrollingUp && scrollTop <= 0) {
         e.preventDefault();
         window.scrollBy({ top: e.deltaY, behavior: "auto" });
       }
-      
-      // Nota: Si está en el medio del chat, el scroll se queda contenido en el celular 
-      // de forma nativa sin mover la landing page de fondo.
     };
 
-    // CRUCIAL: 'passive: false' permite usar e.preventDefault() para frenar el bloqueo
+    // --- 2. GESTIÓN PARA DISPOSITIVOS MÓVILES (Pantallas Táctiles) ---
+    let touchStartY = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const touchCurrentY = e.touches[0].clientY;
+      const touchDeltaY = touchStartY - touchCurrentY; // Positivo si desliza hacia arriba (baja la página)
+
+      const isScrollingDown = touchDeltaY > 0;
+      const isScrollingUp = touchDeltaY < 0;
+
+      // Si el usuario desliza hacia arriba para seguir bajando y ya está en el fondo del chat
+      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
+        // No prevenimos el comportamiento por defecto para que la landing page principal se mueva
+        return;
+      } 
+      // Si el usuario desliza hacia abajo para subir y ya está en el tope superior del chat
+      else if (isScrollingUp && scrollTop <= 0) {
+        return;
+      }
+
+      // Si está scrolleando dentro del chat, evitamos que la página de fondo se mueva de golpe
+      if (scrollHeight > clientHeight) {
+        // Detiene el arrastre de la página principal mientras el chat interno se mueve
+        e.stopPropagation();
+      }
+    };
+
+    // Registrar listeners con passive: false para poder controlar el comportamiento
     container.addEventListener("wheel", handleWheel, { passive: false });
+    container.addEventListener("touchstart", handleTouchStart, { passive: true });
+    container.addEventListener("touchmove", handleTouchMove, { passive: false });
 
     return () => {
       container.removeEventListener("wheel", handleWheel);
+      container.removeEventListener("touchstart", handleTouchStart);
+      container.removeEventListener("touchmove", handleTouchMove);
     };
   }, []);
   // WhatsApp Demo CTA Action
