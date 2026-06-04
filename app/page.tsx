@@ -26,16 +26,20 @@ export default function Home() {
       (window as any).dataLayer = (window as any).dataLayer || [];
     }
   }, []);
-// Código de compatibilidad absoluta (Fijación estricta para Navegadores Huawei y Edge)
+// Código inteligente: Comportamiento nativo para Chrome y Parche Adaptativo para Huawei/Edge
   useEffect(() => {
     const container = chatContainerRef.current;
     if (!container) return;
 
-    // 1. INYECCIÓN CSS: Le decimos al navegador que NO bloquee el scroll del padre
-    // 'contain' o 'auto' controlado evita el bloqueo severo en navegadores viejos/modificados
-    container.style.overscrollBehaviorY = "contain"; 
+    const ua = navigator.userAgent.toLowerCase();
+    // Detectamos si es el navegador nativo de Huawei (HuaweiBrowser/Petal) o Edge Móvil
+    const isHuaweiOrEdge = ua.includes("huawei") || ua.includes("edge") || ua.includes("edga") || ua.includes("huaweibrowser");
 
-    // --- CONFIGURACIÓN PARA PC (Rueda del Ratón) ---
+    // Aplicamos el aislamiento nativo por CSS estándar
+    container.style.overscrollBehaviorY = "contain";
+    container.style.touchAction = "pan-y";
+
+    // --- MANEJO DE RUEDA (Ordenadores) ---
     const handleWheel = (e: WheelEvent) => {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const isScrollingDown = e.deltaY > 0;
@@ -50,46 +54,45 @@ export default function Home() {
       }
     };
 
-    // --- CONFIGURACIÓN PARA MÓVILES (Fuerza Bruta para Huawei Nativo y Edge) ---
-    let touchStartY = 0;
+    // --- MANEJO TÁCTIL (Solo altera comportamiento si es Huawei o Edge) ---
+    let startY = 0;
 
     const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
+      startY = e.touches[0].clientY;
+      if (isHuaweiOrEdge) {
+        container.style.touchAction = "pan-y";
+      }
     };
 
     const handleTouchMove = (e: TouchEvent) => {
+      // Si es Chrome o Samsung, dejamos que el navegador encadene el scroll a su manera nativa
+      if (!isHuaweiOrEdge) return; 
+
       const { scrollTop, scrollHeight, clientHeight } = container;
-      const touchCurrentY = e.touches[0].clientY;
-      const touchDeltaY = touchStartY - touchCurrentY; // Positivo = Dedo sube (Baja scroll)
+      const currentY = e.touches[0].clientY;
+      const deltaY = startY - currentY; 
 
-      // SI EL USUARIO YA LLEGÓ AL FINAL Y SIGUE BAJANDO (Dedo hacia arriba)
-      if (touchDeltaY > 0 && scrollTop + clientHeight >= scrollHeight - 1) {
-        // Rompemos el bloqueo físico ocultando el contenedor al tacto por un instante
-        container.style.pointerEvents = "none";
+      // Parche exclusivo para mitigar el congelamiento en Huawei/Edge
+      if (deltaY > 0 && scrollTop + clientHeight >= scrollHeight - 1) {
+        container.style.touchAction = "none";
         return;
       }
-      
-      // SI EL USUARIO YA LLEGÓ AL TOPE Y SIGUE SUBIENDO (Dedo hacia abajo)
-      if (touchDeltaY < 0 && scrollTop <= 0) {
-        container.style.pointerEvents = "none";
+      if (deltaY < 0 && scrollTop <= 0) {
+        container.style.touchAction = "none";
         return;
-      }
-
-      // Prevenir que Edge y Huawei intenten arrastrar toda la pantalla si estamos dentro del chat
-      if (scrollTop > 0 && scrollTop + clientHeight < scrollHeight) {
-        e.stopPropagation();
       }
     };
 
     const handleTouchEnd = () => {
-      // En cuanto el usuario levanta el dedo, el chat vuelve a ser interactivo inmediatamente
-      container.style.pointerEvents = "auto";
+      if (isHuaweiOrEdge) {
+        container.style.touchAction = "pan-y";
+      }
     };
 
-    // Registrar Eventos
+    // Registrar todos los eventos de manera segura
     container.addEventListener("wheel", handleWheel, { passive: false });
     container.addEventListener("touchstart", handleTouchStart, { passive: true });
-    container.addEventListener("touchmove", handleTouchMove, { passive: false });
+    container.addEventListener("touchmove", handleTouchMove, { passive: isHuaweiOrEdge ? false : true });
     container.addEventListener("touchend", handleTouchEnd, { passive: true });
 
     return () => {
