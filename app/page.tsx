@@ -19,6 +19,7 @@ export default function Home() {
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
+  
   // Track page view or initial setups
   useEffect(() => {
     // Check if dataLayer exists, initialize it if not
@@ -26,72 +27,13 @@ export default function Home() {
       (window as any).dataLayer = (window as any).dataLayer || [];
     }
   }, []);
-// Motor de Continuidad Gráfica Universal (Soporte Estricto para Huawei Nova Y91, Samsung, iOS y PC)
+
+  // Scroll del mockup: solo wheel para desktop. En móviles no hay scroll interno.
   useEffect(() => {
     const container = chatContainerRef.current;
     if (!container) return;
 
-    // Aseguramos el comportamiento nativo inicial por CSS
-    container.style.overscrollBehaviorY = "contain";
-
-    let lastTouchY = 0;
-    let scrollAccumulator = 0;
-    let rafId: number | null = null;
-
-    // Ejecuta el movimiento de la landing page alineado con la tarjeta gráfica (GPU)
-    const renderScroll = () => {
-      if (scrollAccumulator !== 0) {
-        window.scrollBy({ top: scrollAccumulator, behavior: "auto" });
-        scrollAccumulator = 0;
-      }
-      rafId = null;
-    };
-
-    // --- MANEJO TÁCTIL (Celulares y Tablets) ---
-    const handleTouchStart = (e: TouchEvent) => {
-      if (e.touches.length === 1) {
-        lastTouchY = e.touches[0].clientY;
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length !== 1) return;
-
-      const currentTouchY = e.touches[0].clientY;
-      const deltaY = lastTouchY - currentTouchY; // Píxeles reales movidos por el dedo
-      lastTouchY = currentTouchY;
-
-      const { scrollTop, scrollHeight, clientHeight } = container;
-
-      // Protección matemática contra decimales de pantalla (Subpixel precision)
-      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 2;
-      const isAtTop = scrollTop <= 2;
-
-      // Si el usuario quiere bajar la web y el chat ya tocó fondo, o si quiere subir y está en el tope
-      if ((deltaY > 0 && isAtBottom) || (deltaY < 0 && isAtTop)) {
-        scrollAccumulator += deltaY;
-
-        // Solicitamos un cuadro de animación al sistema operativo para evitar el lag
-        if (!rafId) {
-          rafId = requestAnimationFrame(renderScroll);
-        }
-
-        // Cancelamos el freno elástico del navegador para liberar el scroll principal
-        if (e.cancelable) {
-          e.preventDefault();
-        }
-      }
-    };
-
-    const handleTouchEnd = () => {
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-        rafId = null;
-      }
-      scrollAccumulator = 0;
-    };
-
-    // --- MANEJO DE RUEDA (Laptops y PCs de Escritorio) ---
+    // Solo manejar wheel (desktop/laptop)
     const handleWheel = (e: WheelEvent) => {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
@@ -99,24 +41,17 @@ export default function Home() {
 
       if ((e.deltaY > 0 && isAtBottom) || (e.deltaY < 0 && isAtTop)) {
         e.preventDefault();
-        window.scrollBy({ top: e.deltaY, behavior: "auto" });
+        window.scrollBy(0, e.deltaY);
       }
     };
 
-    // Registro seguro de listeners
-    container.addEventListener("touchstart", handleTouchStart, { passive: true });
-    container.addEventListener("touchmove", handleTouchMove, { passive: false });
-    container.addEventListener("touchend", handleTouchEnd, { passive: true });
     container.addEventListener("wheel", handleWheel, { passive: false });
 
     return () => {
-      container.removeEventListener("touchstart", handleTouchStart);
-      container.removeEventListener("touchmove", handleTouchMove);
-      container.removeEventListener("touchend", handleTouchEnd);
       container.removeEventListener("wheel", handleWheel);
-      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
+
   // WhatsApp Demo CTA Action
   const handleWhatsAppDemoClick = () => {
     // GTM Event Tracking
@@ -323,7 +258,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-blue-500/10 rounded-full blur-[80px]" />
             
             {/* Phone Case Frame */}
-            <div className="relative w-[320px] h-[640px] bg-slate-950 border-[6px] border-slate-800 rounded-[45px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col ring-1 ring-slate-800">
+            <div className="relative w-[280px] sm:w-[320px] h-auto md:h-[640px] bg-slate-950 border-[6px] border-slate-800 rounded-[45px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col ring-1 ring-slate-800">
               
               {/* iPhone Notch */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-800 rounded-b-2xl z-20 flex items-center justify-center gap-1.5">
@@ -371,10 +306,10 @@ export default function Home() {
               </div>
 
               {/* Chat Messages Body */}
-<div
-  ref={chatContainerRef}
-  className="flex-grow md:flex-1 bg-slate-950 p-4 overflow-y-auto space-y-4 text-xs pointer-events-none md:pointer-events-auto"
->
+              <div
+                ref={chatContainerRef}
+                className="flex-grow md:flex-1 bg-slate-950 p-4 overflow-hidden md:overflow-y-auto space-y-4 text-xs pointer-events-auto"
+              >
                 
                 {/* SYSTEM MESSAGE TIMESTAMP */}
                 <div className="flex justify-center">
