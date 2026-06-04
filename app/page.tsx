@@ -26,16 +26,15 @@ export default function Home() {
       (window as any).dataLayer = (window as any).dataLayer || [];
     }
   }, []);
-// Motor de Continuidad de Scroll Híbrido (Soporte Universal Escritorio + Móvil Strict)
+// Motor de Scroll Optimizado: Solo maneja la rueda del ratón en computadoras
   useEffect(() => {
     const container = chatContainerRef.current;
     if (!container) return;
 
-    // Aislamiento preventivo de sobre-desplazamiento elástico por CSS nativo
-    container.style.overscrollBehaviorY = "contain";
-
-    // --- 1. GESTIÓN PARA ESCRITORIO (Rueda del Ratón / Trackpad) ---
     const handleWheel = (e: WheelEvent) => {
+      // Si el usuario está en un celular o tablet, el CSS se encarga de todo de forma nativa
+      if (window.innerWidth < 768) return;
+
       const { scrollTop, scrollHeight, clientHeight } = container;
       if (scrollHeight <= clientHeight + 1) return;
 
@@ -51,50 +50,10 @@ export default function Home() {
       }
     };
 
-    // --- 2. GESTIÓN PARA PANTALLAS TÁCTILES (Huawei Nova Y91, Samsung, iOS) ---
-    let lastTouchY = 0;
-
-    const handleTouchStart = (e: TouchEvent) => {
-      if (e.touches.length === 1) {
-        // Registramos el punto inicial exacto donde el usuario apoya el dedo
-        lastTouchY = e.touches[0].clientY;
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length !== 1) return; // Ignoramos gestos de zoom multi-touch
-
-      const { scrollTop, scrollHeight, clientHeight } = container;
-      const currentTouchY = e.touches[0].clientY;
-      
-      // Calculamos el delta (cuántos píxeles físicos arrastró el dedo en este frame)
-      const deltaY = lastTouchY - currentTouchY; 
-      lastTouchY = currentTouchY;
-
-      const isScrollingDown = deltaY > 0;
-      const isScrollingUp = deltaY < 0;
-
-      // CASO A: El usuario arrastra hacia arriba para bajar la web y el chat ya tocó fondo
-      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
-        if (e.cancelable) e.preventDefault(); // Cancelamos el freno físico de EMUI/Huawei
-        window.scrollBy({ top: deltaY, behavior: "auto" }); // Transferimos la energía del dedo al fondo
-      } 
-      // CASO B: El usuario arrastra hacia abajo para subir la web y el chat está en el tope superior
-      else if (isScrollingUp && scrollTop <= 0) {
-        if (e.cancelable) e.preventDefault();
-        window.scrollBy({ top: deltaY, behavior: "auto" });
-      }
-    };
-
-    // Registramos los listeners táctiles con 'passive: false' en move para permitir el control de frenado
     container.addEventListener("wheel", handleWheel, { passive: false });
-    container.addEventListener("touchstart", handleTouchStart, { passive: true });
-    container.addEventListener("touchmove", handleTouchMove, { passive: false });
 
     return () => {
       container.removeEventListener("wheel", handleWheel);
-      container.removeEventListener("touchstart", handleTouchStart);
-      container.removeEventListener("touchmove", handleTouchMove);
     };
   }, []);
   // WhatsApp Demo CTA Action
@@ -353,11 +312,7 @@ export default function Home() {
               {/* Chat Messages Body */}
 <div
   ref={chatContainerRef}
-  className="flex-1 bg-slate-950 p-4 overflow-y-auto space-y-4 text-xs scroll-smooth"
-  style={{
-    WebkitOverflowScrolling: "touch", // Fuerza el comportamiento elástico suave en navegadores móviles
-    willChange: "scroll-position",    // Prepara al procesador del teléfono para un movimiento continuo
-  }}
+  className="flex-grow md:flex-1 bg-slate-950 p-4 overflow-y-auto space-y-4 text-xs pointer-events-none md:pointer-events-auto"
 >
                 
                 {/* SYSTEM MESSAGE TIMESTAMP */}
@@ -414,12 +369,12 @@ export default function Home() {
                       Escribe el número de matrícula (ej: <span className="font-bold text-cyan-400">ABC-1234</span>) o haz clic abajo para iniciar la demo.
                     </p>
                     <div className="pt-2">
-                      <button
-                        onClick={handleWhatsAppDemoClick}
-                        className="w-full py-1.5 px-3 rounded-lg bg-cyan-500 text-slate-950 text-[10px] font-bold text-center hover:bg-cyan-400 transition-colors shadow-sm cursor-pointer"
-                      >
-                        🚀 Iniciar Demo Automática
-                      </button>
+                     <button
+  onClick={handleWhatsAppDemoClick}
+  className="w-full py-1.5 px-3 rounded-lg bg-cyan-500 text-slate-950 text-[10px] font-bold text-center hover:bg-cyan-400 transition-colors shadow-sm cursor-pointer pointer-events-auto"
+>
+  🚀 Iniciar Demo Automática
+</button>
                     </div>
                     <span className="text-[8px] text-slate-500 float-right mt-1">9:44 AM</span>
                   </div>
