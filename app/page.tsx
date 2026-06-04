@@ -26,37 +26,41 @@ export default function Home() {
       (window as any).dataLayer = (window as any).dataLayer || [];
     }
   }, []);
- // Código optimizado en page.tsx (arreglo error scroll)
-useEffect(() => {
-  const container = chatContainerRef.current;
-  if (!container) return;
+// Código optimizado para chat con desborde (Scroll fluido y encadenado)
+  useEffect(() => {
+    const container = chatContainerRef.current;
+    if (!container) return;
 
-  const handleWheel = (e: WheelEvent) => {
-    const { scrollTop, scrollHeight, clientHeight } = container;
-    
-    // Si el contenido del chat cabe completo sin desbordar (como es el caso actual),
-    // no interferimos y dejamos que el navegador haga el scroll natural.
-    if (scrollHeight <= clientHeight + 1) return;
+    const handleWheel = (e: WheelEvent) => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      
+      const isScrollingDown = e.deltaY > 0;
+      const isScrollingUp = e.deltaY < 0;
 
-    const isScrollingDown = e.deltaY > 0;
-    const isScrollingUp = e.deltaY < 0;
+      // 1. CONDICIÓN: El usuario scrollea hacia abajo y ya llegó al fondo del chat
+      if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
+        // Prevenimos que el celular intente hacer un scroll que ya no tiene
+        e.preventDefault(); 
+        // Transferimos el movimiento suavemente a la landing page principal
+        window.scrollBy({ top: e.deltaY, behavior: "auto" });
+      } 
+      // 2. CONDICIÓN: El usuario scrollea hacia arriba y ya llegó al tope superior del chat
+      else if (isScrollingUp && scrollTop <= 0) {
+        e.preventDefault();
+        window.scrollBy({ top: e.deltaY, behavior: "auto" });
+      }
+      
+      // Nota: Si está en el medio del chat, el scroll se queda contenido en el celular 
+      // de forma nativa sin mover la landing page de fondo.
+    };
 
-    if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
-      // Ya estamos en el fondo, delegamos el scroll de la rueda a la ventana
-      window.scrollBy({ top: e.deltaY });
-    } else if (isScrollingUp && scrollTop <= 0) {
-      // Ya estamos en el tope, delegamos el scroll de la rueda a la ventana
-      window.scrollBy({ top: e.deltaY });
-    }
-  };
+    // CRUCIAL: 'passive: false' permite usar e.preventDefault() para frenar el bloqueo
+    container.addEventListener("wheel", handleWheel, { passive: false });
 
-  // Solo se registra el listener de rueda para ordenadores (mouse wheel/trackpad)
-  container.addEventListener("wheel", handleWheel, { passive: true });
-
-  return () => {
-    container.removeEventListener("wheel", handleWheel);
-  };
-}, []);
+    return () => {
+      container.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
   // WhatsApp Demo CTA Action
   const handleWhatsAppDemoClick = () => {
     // GTM Event Tracking
