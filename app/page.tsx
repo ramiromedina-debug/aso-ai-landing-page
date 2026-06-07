@@ -10,7 +10,6 @@ export default function Home() {
   // Form State
   const [formData, setFormData] = useState({
     nombreCompleto: "",
-    nombreTaller: "",
     telefono: "",
     correo: "",
     habeasData: false,
@@ -116,7 +115,7 @@ export default function Home() {
         (window as any).dataLayer.push({
           event: "lead_form_submitted",
           leadData: {
-            nombreTaller: formData.nombreTaller,
+            nombreTaller: "",
             correo: formData.correo,
             telefono: formData.telefono,
             nombreCompleto: formData.nombreCompleto,
@@ -129,7 +128,6 @@ export default function Home() {
       // Clear Form
       setFormData({
         nombreCompleto: "",
-        nombreTaller: "",
         telefono: "",
         correo: "",
         habeasData: false,
@@ -181,7 +179,7 @@ export default function Home() {
             onClick={scrollToForm}
             className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl border border-slate-700 text-slate-300 font-medium text-xs sm:text-sm bg-transparent hover:bg-cyan-500 hover:text-slate-950 hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all duration-300 active:scale-95 cursor-pointer"
           >
-            Agendar Auditoría
+            Solicitar Demostración Gratuita
           </button>
         </div>
       </header>
@@ -200,7 +198,7 @@ export default function Home() {
             </div>
 
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-50 leading-[1.15] mb-4">
-            La plataforma de IA que <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">automatiza las cotizaciones</span>, el inventario y la asistencia técnica de tu taller automotriz
+            ¿Pasas más tiempo respondiendo cotizaciones en WhatsApp que reparando autos? <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Automatiza tu taller</span> con Inteligencia Artificial.
             </h1>
 
             <p className="text-sm sm:text-base md:text-lg text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-6">
@@ -221,7 +219,7 @@ export default function Home() {
                 <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
                   <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.965C16.528 1.975 14.068 1.957 12 1.957c-5.437 0-9.862 4.372-9.866 9.802-.001 1.765.485 3.49 1.408 5.011l-.955 3.49 3.57-.936zm11.367-7.251c-.33-.164-1.951-.964-2.251-1.074-.3-.109-.518-.164-.736.164-.218.327-.844 1.074-1.034 1.293-.19.218-.379.245-.71.082-.33-.164-1.393-.513-2.653-1.638-.98-.874-1.641-1.953-1.833-2.28-.192-.327-.02-.504.145-.668.148-.148.33-.382.495-.573.165-.19.22-.328.33-.546.11-.218.055-.41-.028-.573-.082-.164-.736-1.774-1.009-2.43-.267-.64-.538-.553-.736-.563-.19-.01-.409-.012-.627-.012-.218 0-.573.082-.872.41-.3.327-1.144 1.118-1.144 2.729 0 1.61 1.172 3.166 1.335 3.385.164.218 2.307 3.522 5.59 4.939.78.337 1.39.539 1.86.688.784.248 1.497.213 2.06.129.627-.094 1.951-.797 2.225-1.568.273-.769.273-1.428.191-1.567-.082-.14-.299-.22-.63-.383z" />
                 </svg>
-                Prueba el Bot Ahora
+                Solicitar Demostración Gratuita
               </button>
 
               {/* Hand-drawn styled straight arrow pointing to the button */}
@@ -365,11 +363,11 @@ export default function Home() {
                       Escribe el número de matrícula (ej: <span className="font-bold text-cyan-400">ABC-1234</span>) o haz clic abajo para iniciar la demo.
                     </p>
                     <div className="pt-2">
-                     <button
+                      <button
   onClick={handleWhatsAppDemoClick}
   className="w-full py-1.5 px-3 rounded-lg bg-cyan-500 text-slate-950 text-[10px] font-bold text-center hover:bg-cyan-400 transition-colors shadow-sm cursor-pointer pointer-events-auto"
 >
-  🚀 Iniciar Demo Automática
+  🚀 Solicitar Demostración Gratuita
 </button>
                     </div>
                     <span className="text-[8px] text-slate-500 float-right mt-1">9:44 AM</span>
@@ -404,59 +402,6 @@ export default function Home() {
           </div>
 
         </div>
-
-        {/* BENEFICIOS GRID (Adds hyper-professionalism) */}
-        <section className="py-20 border-t border-slate-900 mt-20">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-50 mb-4">
-              ¿Por qué los talleres eligen a Aso Ai Solutions?
-            </h2>
-            <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
-              Implementamos sistemas de automatización robustos diseñados específicamente para resolver los mayores dolores de cabeza de los dueños de talleres.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Beneficio 1 */}
-            <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-6 hover:border-cyan-500/30 transition-all duration-300">
-              <div className="w-12 h-12 bg-cyan-950/40 rounded-xl border border-cyan-800/40 flex items-center justify-center text-cyan-400 mb-5">
-                <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                  <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm3.3 14.79L11 13.5V7h1.5v5.78l3.7 2.22-.91 1.79z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold text-slate-50 mb-2">Respuestas 24/7 sin esfuerzo</h3>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                Tus clientes pueden consultar el estado de reparación de sus autos a cualquier hora del día o de la noche, de forma instantánea.
-              </p>
-            </div>
-
-            {/* Beneficio 2 */}
-            <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-6 hover:border-cyan-500/30 transition-all duration-300">
-              <div className="w-12 h-12 bg-cyan-950/40 rounded-xl border border-cyan-800/40 flex items-center justify-center text-cyan-400 mb-5">
-                <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold text-slate-50 mb-2">Presupuestos y Aprobación</h3>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                Envía cotizaciones digitales profesionales directamente a sus chats de WhatsApp y permite que aprueben los servicios con un solo toque.
-              </p>
-            </div>
-
-            {/* Beneficio 3 */}
-            <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-6 hover:border-cyan-500/30 transition-all duration-300">
-              <div className="w-12 h-12 bg-cyan-950/40 rounded-xl border border-cyan-800/40 flex items-center justify-center text-cyan-400 mb-5">
-                <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold text-slate-50 mb-2">Control por Google Sheets</h3>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                Toda la información se sincroniza automáticamente con hojas de cálculo para que no tengas que lidiar con sistemas complejos ni software costoso.
-              </p>
-            </div>
-          </div>
-        </section>
 
         {/* LEAD CAPTURE FORM SECTION */}
         <section id="lead-form-section" className="py-12 sm:py-16 scroll-mt-24">
@@ -498,7 +443,7 @@ export default function Home() {
                 <>
                   <div className="text-center mb-8 space-y-2">
                     <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-50 tracking-tight">
-                      Obtén una Auditoría Gratuita
+                      Solicitar Demostración Gratuita
                     </h2>
                     <p className="text-slate-400 text-xs sm:text-sm max-w-md mx-auto">
                       Analizamos los dolores de comunicación de tu taller y diseñamos una solución a medida conectada a tu WhatsApp.
@@ -519,7 +464,7 @@ export default function Home() {
                     )}
 
                     {/* FIELDS ROW 1 */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-semibold text-slate-400 tracking-wide">
                           Nombre Completo
@@ -535,24 +480,6 @@ export default function Home() {
                         />
                       </div>
 
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-semibold text-slate-400 tracking-wide">
-                          Nombre del Taller
-                        </label>
-                        <input
-                          type="text"
-                          name="nombreTaller"
-                          required
-                          value={formData.nombreTaller}
-                          onChange={handleInputChange}
-                          placeholder="Ej: Auto Servicio Premium"
-                          className="w-full bg-slate-950 border border-slate-800 text-slate-50 placeholder-slate-600 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 rounded-xl p-3 text-sm transition-all duration-300"
-                        />
-                      </div>
-                    </div>
-
-                    {/* FIELDS ROW 2 */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-semibold text-slate-400 tracking-wide">
                           Teléfono (WhatsApp)
@@ -626,7 +553,7 @@ export default function Home() {
                             Procesando Solicitud...
                           </>
                         ) : (
-                          "Solicitar Auditoría y Precios a Aso Ai Solutions"
+                          "Solicitar Demostración Gratuita"
                         )}
                       </button>
                     </div>
@@ -643,6 +570,61 @@ export default function Home() {
 
           </div>
         </section>
+
+        {/* BENEFICIOS GRID (Adds hyper-professionalism) */}
+        <section className="py-20 border-t border-slate-900 mt-20">
+          <div className="text-center mb-16">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-50 mb-4">
+              ¿Por qué los talleres eligen a Aso Ai Solutions?
+            </h2>
+            <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+              Implementamos sistemas de automatización robustos diseñados específicamente para resolver los mayores dolores de cabeza de los dueños de talleres.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Beneficio 1 */}
+            <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-6 hover:border-cyan-500/30 transition-all duration-300">
+              <div className="w-12 h-12 bg-cyan-950/40 rounded-xl border border-cyan-800/40 flex items-center justify-center text-cyan-400 mb-5">
+                {/* SVG representing AI / CPU Assist */}
+                <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                  <path d="M15 9H9v6h6V9zm-2 4h-2v-2h2v2zm8-2V9h-2V7c0-1.1-.9-2-2-2h-2V3h-2v2h-2V3H9v2H7c-1.1 0-2 .9-2 2v2H3v2h2v2H3v2h2v2c0 1.1.9 2 2 2h2v2h2v-2h2v2h2v-2h2c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2zm-4 6H7V7h10v10z"/>
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-slate-50 mb-2">Asistencia Técnica Avanzada con IA</h3>
+              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                Sube el manual de cualquier vehículo. Tus mecánicos pueden chatear con el agente para obtener pasos de reparación exactos y diagramas de piezas en 3 segundos, liberando los elevadores más rápido.
+              </p>
+            </div>
+
+            {/* Beneficio 2 */}
+            <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-6 hover:border-cyan-500/30 transition-all duration-300">
+              <div className="w-12 h-12 bg-cyan-950/40 rounded-xl border border-cyan-800/40 flex items-center justify-center text-cyan-400 mb-5">
+                <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-slate-50 mb-2">Presupuestos y Aprobación</h3>
+              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                Envía cotizaciones digitales profesionales directamente a sus chats de WhatsApp y permite que aprueben los servicios con un solo toque.
+              </p>
+            </div>
+
+            {/* Beneficio 3 */}
+            <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-6 hover:border-cyan-500/30 transition-all duration-300">
+              <div className="w-12 h-12 bg-cyan-950/40 rounded-xl border border-cyan-800/40 flex items-center justify-center text-cyan-400 mb-5">
+                <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-slate-50 mb-2">Control por Google Sheets</h3>
+              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                Toda la información se sincroniza automáticamente con hojas de cálculo para que no tengas que lidiar con sistemas complejos ni software costoso.
+              </p>
+            </div>
+          </div>
+        </section>
+
 
       </main>
 
