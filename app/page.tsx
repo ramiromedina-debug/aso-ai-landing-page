@@ -143,7 +143,10 @@ export default function Home() {
   const scrollToForm = () => {
     const element = document.getElementById("lead-form-section");
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+-     element.scrollIntoView({ behavior: "smooth" });
++     const yOffset = -96; // Offset para compensar la cabecera sticky y evitar que tape el formulario
++     const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
++     window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
 
