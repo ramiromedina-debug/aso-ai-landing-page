@@ -282,7 +282,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* WhatsApp App Header */}
+              {/* WhatsApp App Headers */}
               <div className="bg-slate-900 border-b border-slate-800/80 px-4 py-3 flex items-center gap-3">
                 <div className="relative">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-slate-950 font-bold text-sm">
