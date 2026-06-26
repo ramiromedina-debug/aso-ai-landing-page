@@ -645,6 +645,17 @@ export default function Home() {
             </span>
           </div>
 
+          {/* Address */}
+          <div className="flex flex-col items-center md:items-start gap-1 text-xs text-slate-500">
+            <div className="flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 fill-current text-cyan-500 shrink-0" viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+              </svg>
+              <span>CL 77 C C CR 91 75 IN 301</span>
+            </div>
+            <span className="ml-5">Medellín, Antioquia 050041, Colombia</span>
+          </div>
+
           {/* Links */}
           <div className="flex gap-6 text-xs text-slate-500">
             <a href="/terminos" className="hover:text-cyan-400 transition-colors">Términos de Servicio</a>
