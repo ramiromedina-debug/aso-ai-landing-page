@@ -1,0 +1,17 @@
+{
+  "name": "ASO AI Solutions - Inteligencia Artificial para Talleres Mecánicos",
+  "version": "1.0.0",
+  "description": "Catálogo de soluciones de inteligencia artificial para talleres mecánicos en Medellín y Colombia.",
+  "url": "https://asoaisolutions.com",
+  "endpoints": {
+    "agent_card": "https://asoaisolutions.com/.well-known/agent-card.json",
+    "llms": "https://asoaisolutions.com/llms.txt",
+    "sitemap": "https://asoaisolutions.com/sitemap.xml"
+  },
+  "capabilities": [
+    "consulta_estados_reparacion_whatsapp",
+    "aprobacion_presupuestos_repuestos",
+    "recordatorios_mantenimiento_preventivo",
+    "agendamiento_citas_taller"
+  ]
+}

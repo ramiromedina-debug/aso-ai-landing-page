@@ -1,0 +1,31 @@
+User-agent: *
+Allow: /
+
+# Rastreadores de Imágenes y Favicons (Google Search Guidelines)
+User-agent: Googlebot-Image
+Allow: /favicon.ico
+Allow: /icon-*.png
+Allow: /apple-touch-icon.png
+Allow: /logo.png
+Allow: /
+
+# Rastreadores de Motores de Búsqueda y GEO 2026 (Generative Engine Optimization)
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://asoaisolutions.com/sitemap.xml

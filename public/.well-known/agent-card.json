@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0",
+  "humanReadableId": "asoaisolutions/auto-repair-ai-agent",
+  "agentVersion": "1.0.0",
+  "name": "ASO AI Solutions Auto Repair AI Agent",
+  "description": "Agente oficial de ASO AI Solutions especializado en inteligencia artificial para talleres mecánicos e inteligencia artificial para talleres en Medellín. Automatiza estados de reparación en WhatsApp, cotizaciones y citas mecánicas.",
+  "url": "https://asoaisolutions.com",
+  "provider": {
+    "name": "ASO AI Solutions",
+    "url": "https://asoaisolutions.com",
+    "support_contact": "ramedina@goasoaisolutions.com"
+  },
+  "supportedInterfaces": [
+    {
+      "url": "https://asoaisolutions.com/api/leads",
+      "protocolBinding": "HTTP+JSON",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "capabilities": {
+    "a2aVersion": "1.0",
+    "streaming": false,
+    "pushNotifications": false
+  },
+  "defaultInputModes": [
+    "application/json",
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "application/json"
+  ],
+  "skills": [
+    {
+      "id": "workshop-lead-and-repair-status",
+      "name": "Gestión de Estados de Reparación y Cotizaciones para Talleres",
+      "description": "Automatiza la respuesta del estado de reparación por placa, aprobación de presupuestos y citas para talleres mecánicos en Medellín y Colombia.",
+      "tags": [
+        "inteligencia artificial para talleres mecanicos",
+        "inteligencia artificial para talleres en medellin",
+        "chatbot whatsapp taller mecanico",
+        "software taller mecanico medellin",
+        "automatizacion taller automotriz"
+      ],
+      "examples": [
+        "Quiero automatizar la respuesta de estados de reparación en WhatsApp para mi taller mecánico en Medellín.",
+        "Necesito un asistente con inteligencia artificial para cotizaciones y citas en mi taller automotriz."
+      ],
+      "inputModes": ["application/json"],
+      "outputModes": ["application/json"]
+    }
+  ]
+}

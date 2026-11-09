@@ -1,0 +1,29 @@
+# ASO AI Solutions - Inteligencia Artificial para Talleres Mecánicos
+> Especialistas en inteligencia artificial para talleres mecánicos e inteligencia artificial para talleres en Medellín. Automatizamos la atención al cliente, consultas de estado de reparación y presupuestos mediante asistentes de WhatsApp Business API Oficial conectados a flujos inteligentes en n8n y bases de datos Supabase.
+
+Información técnica y operativa para talleres automotrices:
+- Inteligencia artificial para talleres mecánicos: Asistente virtual conectado a WhatsApp para atención 24/7, recepción inteligente de vehículos, triaje de averías mecánicas, consulta de estado de reparación en tiempo real y aprobación de presupuestos de repuestos y mano de obra en 1 clic.
+- Inteligencia artificial para talleres en Medellín: Implementación y consultoría presencial y remota para talleres automotrices y centros de servicio en Medellín y el Valle de Aburrá (Barrio Colombia, Guayabal, La 33, Laureles, Belén, Itagüí, Envigado, Bello y Sabaneta).
+- Automatización de Estados de Reparación en WhatsApp: El cliente escribe su número de placa o ticket y el agente de IA consulta la orden de trabajo para responder al instante el avance, tiempo estimado de entrega y fotografías de la reparación, eliminando hasta un 90% de las llamadas que interrumpen a los mecánicos.
+- Presupuestos y Cotizaciones Instantáneas: Generación estructurada de proformas de reparación con desglose de repuestos y mano de obra, enviadas con botones interactivos para aprobación o rechazo en WhatsApp.
+- Recordatorios Predictivos de Mantenimiento: Flujos automáticos que calculan la fecha o kilometraje estimado del próximo cambio de aceite, revisión técnico-mecánica o afinación, reactivando clientes antiguos automáticamente.
+- Conectividad y Privacidad: Integración con n8n, Google Sheets, Supabase y ERPs existentes bajo la Ley 1581 de 2012 de Protección de Datos Personales en Colombia.
+
+## Soluciones y Páginas Pilares
+- [Inteligencia Artificial para Talleres Mecánicos en Medellín](https://asoaisolutions.com/inteligencia-artificial-para-talleres-mecanicos-medellin): Guía integral y plataforma de automatización con IA para talleres en Medellín y Colombia.
+- [Demostración Gratuita](https://asoaisolutions.com/#demo): Prueba en vivo del flujo conversacional interactivo en WhatsApp para cotizaciones y estados de reparación.
+
+## Sede Física y Datos de Entidad (Local SEO Medellín)
+- Nombre: ASO AI Solutions
+- Titular / Representante: MEDINA SERNA RAMIRO ANDRES (NIT: 1037236772)
+- Especialidad: Inteligencia Artificial para Talleres Mecánicos en Medellín
+- Dirección: Carrera 79 # 57 - 65 / CL 77 C C CR 91 75 IN 301, Medellín, Antioquia, Colombia
+- Teléfono / WhatsApp: +57 333 277 3006
+- Correo: ramedina@goasoaisolutions.com
+- Coordenadas GPS: 6.2710601, -75.5968659
+- Google Maps: https://www.google.com/maps/place/ASO+AI+SOLUTIONS+%7C+Agencia+de+inteligencia+artificial+en+Medellin/@6.2710601,-75.5968659,17z
+
+## Marco Legal y Privacidad
+- [Política de Privacidad](https://asoaisolutions.com/privacidad): Tratamiento de datos de clientes y habeas data según la Ley 1581 de 2012.
+- [Términos del Servicio](https://asoaisolutions.com/terminos): Condiciones de servicio de automatización y software B2B.
+- [Soporte Técnico](https://asoaisolutions.com/soporte): Centro de ayuda y asistencia técnica para talleres afiliados.

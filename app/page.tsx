@@ -196,15 +196,15 @@ export default function Home() {
           <div className="lg:col-span-7 flex flex-col text-center lg:text-left">
             <div className="inline-flex items-center gap-2 self-center lg:self-start px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs text-cyan-400 font-medium mb-4">
               <span className="w-2 h-2 rounded-full bg-cyan-500 animate-ping" />
-              Especializado para Talleres Mecánicos
+              Inteligencia Artificial para Talleres en Medellín y Talleres Mecánicos
             </div>
 
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-50 leading-[1.15] mb-4">
-            ¿Pasas más tiempo respondiendo cotizaciones en WhatsApp que reparando autos? <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Automatiza tu taller</span> con Inteligencia Artificial.
+              ¿Pasas más tiempo respondiendo cotizaciones en WhatsApp que reparando autos? <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Inteligencia Artificial para Talleres Mecánicos</span> en Medellín.
             </h1>
 
             <p className="text-sm sm:text-base md:text-lg text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-6">
-              Automatiza las actualizaciones y presupuestos de tu taller con inteligencia artificial conectada a tu WhatsApp. Una solución de <span className="text-cyan-400 font-semibold">Aso Ai Solutions</span>.
+              Especialistas en inteligencia artificial para talleres en Medellín y Colombia. Automatiza actualizaciones de estado de reparación, presupuestos y recordatorios preventivos con <span className="text-cyan-400 font-semibold">Aso Ai Solutions</span>.
             </p>
 
             {/* DEMO BLOCK */}
@@ -659,7 +659,13 @@ export default function Home() {
           </div>
 
           {/* Links */}
-          <div className="flex gap-6 text-xs text-slate-500">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-slate-400">
+            <a
+              href="/inteligencia-artificial-para-talleres-mecanicos-medellin"
+              className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
+            >
+              IA para Talleres en Medellín
+            </a>
             <a href="/terminos" className="hover:text-cyan-400 transition-colors">Términos de Servicio</a>
             <a href="/privacidad" className="hover:text-cyan-400 transition-colors">Política de Privacidad</a>
             <a href="/soporte" className="hover:text-cyan-400 transition-colors">Soporte</a>
